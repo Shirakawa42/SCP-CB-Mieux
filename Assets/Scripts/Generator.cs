@@ -17,17 +17,23 @@ public class Generator : MonoBehaviour
     public enum TileType { Empty, Room, Corridor };
     private Dictionary<Vector2Int, TileType> map = new Dictionary<Vector2Int, TileType>();
     private Dictionary<Vector2Int, GameObject> mapPrefabs = new Dictionary<Vector2Int, GameObject>();
+    private List<GameObject> allDoors = new List<GameObject>();
+    private int mapStartX = 500;
+    private int mapStartY = 500;
+    private int mapEndX = -500;
+    private int mapEndY = -500;
+    private int roomsToGenerateSave;
 
     private int CountNeighbours(Vector2Int pos)
     {
         int count = 0;
-        if (map.ContainsKey(new Vector2Int(pos.x - 1, pos.y)))
+        if (map.ContainsKey(new Vector2Int(pos.x - 1, pos.y)) && map[new Vector2Int(pos.x - 1, pos.y)] != TileType.Empty)
             count++;
-        if (map.ContainsKey(new Vector2Int(pos.x + 1, pos.y)))
+        if (map.ContainsKey(new Vector2Int(pos.x + 1, pos.y)) && map[new Vector2Int(pos.x + 1, pos.y)] != TileType.Empty)
             count++;
-        if (map.ContainsKey(new Vector2Int(pos.x, pos.y - 1)))
+        if (map.ContainsKey(new Vector2Int(pos.x, pos.y - 1)) && map[new Vector2Int(pos.x, pos.y - 1)] != TileType.Empty)
             count++;
-        if (map.ContainsKey(new Vector2Int(pos.x, pos.y + 1)))
+        if (map.ContainsKey(new Vector2Int(pos.x, pos.y + 1)) && map[new Vector2Int(pos.x, pos.y + 1)] != TileType.Empty)
             count++;
         return count;
     }
@@ -85,6 +91,8 @@ public class Generator : MonoBehaviour
             currentPos = GetRandomPosition(availablePos);
             while (CountNeighbours(currentPos) > 1)
             {
+                if (Random.Range(0, 100) < 50)
+                    break;
                 availablePos.Remove(currentPos);
                 if (availablePos.Count == 0)
                     break;
@@ -93,14 +101,40 @@ public class Generator : MonoBehaviour
             if (isNearRoom(currentPos))
             {
                 map.Add(currentPos, TileType.Corridor);
+                if (currentPos.x < mapStartX)
+                    mapStartX = currentPos.x;
+                if (currentPos.x > mapEndX)
+                    mapEndX = currentPos.x;
+                if (currentPos.y < mapStartY)
+                    mapStartY = currentPos.y;
+                if (currentPos.y > mapEndY)
+                    mapEndY = currentPos.y;
             }
             else
             {
                 if (Random.Range(0, 100) < corridorDensity)
+                {
                     map.Add(currentPos, TileType.Corridor);
+                    if (currentPos.x < mapStartX)
+                        mapStartX = currentPos.x;
+                    if (currentPos.x > mapEndX)
+                        mapEndX = currentPos.x;
+                    if (currentPos.y < mapStartY)
+                        mapStartY = currentPos.y;
+                    if (currentPos.y > mapEndY)
+                        mapEndY = currentPos.y;
+                }
                 else
                 {
                     map.Add(currentPos, TileType.Room);
+                    if (currentPos.x < mapStartX)
+                        mapStartX = currentPos.x;
+                    if (currentPos.x > mapEndX)
+                        mapEndX = currentPos.x;
+                    if (currentPos.y < mapStartY)
+                        mapStartY = currentPos.y;
+                    if (currentPos.y > mapEndY)
+                        mapEndY = currentPos.y;
                     roomPositions.Add(currentPos);
                     roomsToGenerate--;
                 }
@@ -112,7 +146,7 @@ public class Generator : MonoBehaviour
             Debug.Log("Could not generate all rooms");
     }
 
-    private void RemoveUselessCorridors()
+    private bool RemoveUselessCorridors()
     {
         List<Vector2Int> toRemove = new List<Vector2Int>();
         foreach (Vector2Int pos in map.Keys)
@@ -126,14 +160,80 @@ public class Generator : MonoBehaviour
         foreach (Vector2Int pos in toRemove)
             map.Remove(pos);
         if (toRemove.Count > 0)
-            RemoveUselessCorridors();
+            return true;
+        return false;
+    }
+
+    private bool RemoveUselessCorridorsPatterns()
+    {
+        bool changed = false;
+
+        for (int x = -50; x <= 50; x++)
+        {
+            for (int y = -50; y <= 50; y++)
+            {
+                for (int p = 0; p < Patterns.nbPatterns; p++)
+                {
+                    bool valid = true;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (Patterns.pattern[p, i, j] == '0')
+                            {
+                                if (map.ContainsKey(new Vector2Int(x + i, y + j)) && map[new Vector2Int(x + i, y + j)] != TileType.Empty)
+                                {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                            else if (Patterns.pattern[p, i, j] == '1')
+                            {
+                                if (!map.ContainsKey(new Vector2Int(x + i, y + j)) || map[new Vector2Int(x + i, y + j)] == TileType.Empty)
+                                {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                            else if (Patterns.pattern[p, i, j] == '3')
+                            {
+                                if (!map.ContainsKey(new Vector2Int(x + i, y + j)) || map[new Vector2Int(x + i, y + j)] != TileType.Corridor)
+                                {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!valid)
+                            break;
+                    }
+                    if (valid)
+                    {
+                        changed = true;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (Patterns.pattern[p, i, j] == '3')
+                                {
+                                    map[new Vector2Int(x + i, y + j)] = TileType.Empty;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (changed)
+            return true;
+        return false;
     }
 
     private bool CheckNeighbour(Vector2Int pos, Vector2Int dir)
     {
         Vector2Int newPos = new Vector2Int(pos.x + dir.x, pos.y + dir.y);
 
-        if (map.ContainsKey(newPos))
+        if (map.ContainsKey(newPos) && map[newPos] != TileType.Empty)
         {
             if (map[newPos] == TileType.Room)
             {
@@ -171,7 +271,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE),Quaternion.Euler(0, 90, 0));
+            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -269,22 +369,22 @@ public class Generator : MonoBehaviour
             {
                 if (CheckNeighbour(pos, new Vector2Int(1, 0)) && !doorPositions.Contains(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 3 }))
                 {
-                    Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE + TILE_SIZE / 2, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+                    allDoors.Add(Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE + TILE_SIZE / 2, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0)));
                     doorPositions.Add(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 0 });
                 }
                 if (CheckNeighbour(pos, new Vector2Int(-1, 0)) && !doorPositions.Contains(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 3 }))
                 {
-                    Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE - TILE_SIZE / 2, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+                    allDoors.Add(Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE - TILE_SIZE / 2, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0)));
                     doorPositions.Add(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 1 });
                 }
                 if (CheckNeighbour(pos, new Vector2Int(0, 1)) && !doorPositions.Contains(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 3 }))
                 {
-                    Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE + TILE_SIZE / 2), Quaternion.Euler(0, 0, 0));
+                    allDoors.Add(Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE + TILE_SIZE / 2), Quaternion.Euler(0, 0, 0)));
                     doorPositions.Add(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 2 });
                 }
                 if (CheckNeighbour(pos, new Vector2Int(0, -1)) && !doorPositions.Contains(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 3 }))
                 {
-                    Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE - TILE_SIZE / 2), Quaternion.Euler(0, 0, 0));
+                    allDoors.Add(Instantiate(doors[Random.Range(0, doors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE - TILE_SIZE / 2), Quaternion.Euler(0, 0, 0)));
                     doorPositions.Add(new doorPlaced { pos = pos + new Vector2Int(1, 0), direction = 3 });
                 }
             }
@@ -309,8 +409,27 @@ public class Generator : MonoBehaviour
 
     void Start()
     {
+        roomsToGenerateSave = roomsToGenerate;
         GenerateMap();
-        RemoveUselessCorridors();
+        while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns());
         GenerateMapPrefabs();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (GameObject obj in mapPrefabs.Values)
+                Destroy(obj);
+            foreach (GameObject obj in allDoors)
+                Destroy(obj);
+            mapPrefabs.Clear();
+            map.Clear();
+            allDoors.Clear();
+            roomsToGenerate = roomsToGenerateSave;
+            GenerateMap();
+            while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns());
+            GenerateMapPrefabs();
+        }
     }
 }

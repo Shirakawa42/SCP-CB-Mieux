@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3462090868808696006}
   - component: {fileID: 3462090868808696001}
   m_Layer: 0
-  m_Name: Straight_1
+  m_Name: Straight_BASE
   m_TagString: Corridor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

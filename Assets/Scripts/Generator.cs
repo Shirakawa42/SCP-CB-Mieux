@@ -8,7 +8,11 @@ public class Generator : MonoBehaviour
     public List<GameObject> angleCorridors;
     public List<GameObject> threeWayCorridors;
     public List<GameObject> fourWayCorridors;
-    public List<GameObject> rooms;
+    public List<GameObject> straightRooms;
+    public List<GameObject> angleRooms;
+    public List<GameObject> threeWayRooms;
+    public List<GameObject> fourWayRooms;
+    public List<GameObject> deadendRooms;
     public List<GameObject> doors;
     public int roomsToGenerate;
     public int roomsMinDistance;
@@ -353,6 +357,127 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private void PlaceRooms(Vector2Int pos)
+    {
+        if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && CheckNeighbour(pos, new Vector2Int(0, 1))
+            && !CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(-1, 0))
+            && !CheckNeighbour(pos, new Vector2Int(0, 1))
+            && CheckNeighbour(pos, new Vector2Int(0, -1)))
+        {
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            mapPrefabs.Add(pos, room);
+        }
+        else
+        {
+            GameObject room = Instantiate(fourWayRooms[Random.Range(0, fourWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, room);
+        }
+    }
+
     private struct doorPlaced
     {
         public Vector2Int pos;
@@ -394,13 +519,8 @@ public class Generator : MonoBehaviour
     private void GenerateMapPrefabs()
     {
         foreach (Vector2Int pos in map.Keys)
-        {
             if (map[pos] == TileType.Room)
-            {
-                GameObject room = Instantiate(rooms[Random.Range(0, rooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.identity);
-                mapPrefabs.Add(pos, room);
-            }
-        }
+                PlaceRooms(pos);
         foreach (Vector2Int pos in map.Keys)
             if (map[pos] == TileType.Corridor)
                 PlaceCorridor(pos);

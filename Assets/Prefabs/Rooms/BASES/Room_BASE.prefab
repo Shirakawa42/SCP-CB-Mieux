@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6845261626061003922}
   - component: {fileID: 873935327607289966}
   m_Layer: 0
-  m_Name: LCZ_Room
+  m_Name: Room_BASE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

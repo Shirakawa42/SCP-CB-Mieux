@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1867498546564131555}
   - component: {fileID: 1867498546564131556}
   m_Layer: 0
-  m_Name: 3ways_1
+  m_Name: 3ways_BASE
   m_TagString: Corridor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

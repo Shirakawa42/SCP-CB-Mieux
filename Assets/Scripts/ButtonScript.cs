@@ -29,6 +29,7 @@ public class ButtonScript : HandTarget
             other.RemoveTarget(transform.gameObject);
             transform.GetComponent<BoxCollider>().enabled = false;
             isEnable = false;
+            transform.GetComponent<AudioSource>().Play();
         }
     }
 

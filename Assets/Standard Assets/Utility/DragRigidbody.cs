@@ -24,7 +24,7 @@ namespace UnityStandardAssets.Utility
                 return;
             }
 
-            var mainCamera = FindCamera();
+            var mainCamera = Camera.main;
 
             // We need to actually hit an object
             RaycastHit hit = new RaycastHit();
@@ -67,7 +67,7 @@ namespace UnityStandardAssets.Utility
             var oldAngularDrag = m_SpringJoint.connectedBody.angularDrag;
             m_SpringJoint.connectedBody.drag = k_Drag;
             m_SpringJoint.connectedBody.angularDrag = k_AngularDrag;
-            var mainCamera = FindCamera();
+            var mainCamera = Camera.main;
             while (Input.GetMouseButton(0))
             {
                 var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -80,17 +80,6 @@ namespace UnityStandardAssets.Utility
                 m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
                 m_SpringJoint.connectedBody = null;
             }
-        }
-
-
-        private Camera FindCamera()
-        {
-            if (GetComponent<Camera>())
-            {
-                return GetComponent<Camera>();
-            }
-
-            return Camera.main;
         }
     }
 }

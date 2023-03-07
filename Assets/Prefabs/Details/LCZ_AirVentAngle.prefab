@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5736196815518514815}
   - component: {fileID: 5780178196955025804}
   m_Layer: 0
-  m_Name: AirVentAngle
+  m_Name: LCZ_AirVentAngle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

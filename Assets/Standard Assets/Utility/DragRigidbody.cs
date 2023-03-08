@@ -12,6 +12,7 @@ namespace UnityStandardAssets.Utility
         const float k_AngularDrag = 5.0f;
         const float k_Distance = 0.2f;
         const bool k_AttachToCenterOfMass = false;
+        public float range = 1.0f;
 
         private SpringJoint m_SpringJoint;
 
@@ -24,13 +25,13 @@ namespace UnityStandardAssets.Utility
                 return;
             }
 
-            var mainCamera = FindCamera();
+            var mainCamera = Camera.main;
 
             // We need to actually hit an object
             RaycastHit hit = new RaycastHit();
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 100,
+                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, range,
                                  Physics.DefaultRaycastLayers))
             {
                 return;
@@ -67,7 +68,7 @@ namespace UnityStandardAssets.Utility
             var oldAngularDrag = m_SpringJoint.connectedBody.angularDrag;
             m_SpringJoint.connectedBody.drag = k_Drag;
             m_SpringJoint.connectedBody.angularDrag = k_AngularDrag;
-            var mainCamera = FindCamera();
+            var mainCamera = Camera.main;
             while (Input.GetMouseButton(0))
             {
                 var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -80,17 +81,6 @@ namespace UnityStandardAssets.Utility
                 m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
                 m_SpringJoint.connectedBody = null;
             }
-        }
-
-
-        private Camera FindCamera()
-        {
-            if (GetComponent<Camera>())
-            {
-                return GetComponent<Camera>();
-            }
-
-            return Camera.main;
         }
     }
 }

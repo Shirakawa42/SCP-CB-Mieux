@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using TMPro;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 public class Generator : MonoBehaviour
 {
@@ -13,12 +17,17 @@ public class Generator : MonoBehaviour
     public List<GameObject> threeWayRooms;
     public List<GameObject> fourWayRooms;
     public List<GameObject> deadendRooms;
+    public List<GameObject> metroRooms;
+    public List<GameObject> metroStraightCorridors;
+    public List<GameObject> metroAngleCorridors;
+    public GameObject metro;
+
     public List<GameObject> doors;
     public int roomsToGenerate;
     public int roomsMinDistance;
     public int corridorDensity;
     private const int TILE_SIZE = 24;
-    public enum TileType { Empty, Room, Corridor };
+    public enum TileType { Empty, Room, Corridor, Metro };
     private Dictionary<Vector2Int, TileType> map = new Dictionary<Vector2Int, TileType>();
     private Dictionary<Vector2Int, GameObject> mapPrefabs = new Dictionary<Vector2Int, GameObject>();
     private List<GameObject> allDoors = new List<GameObject>();
@@ -27,6 +36,8 @@ public class Generator : MonoBehaviour
     private int mapEndX = -500;
     private int mapEndY = -500;
     private int roomsToGenerateSave;
+    public enum MetroStation { Left, Right, Top, Bottom, Hub };
+    public Dictionary<MetroStation, Vector2Int> metroStations = new Dictionary<MetroStation, Vector2Int>();
 
     private int CountNeighbours(Vector2Int pos)
     {
@@ -83,13 +94,50 @@ public class Generator : MonoBehaviour
         return false;
     }
 
+    private void getInitialMetroRoomsPosition() {
+        metroStations.Add(MetroStation.Left, new Vector2Int(-1, 0));
+        metroStations.Add(MetroStation.Right, new Vector2Int(1, 0));
+        metroStations.Add(MetroStation.Top, new Vector2Int(0, 1));
+        metroStations.Add(MetroStation.Bottom, new Vector2Int(0, -1));
+        metroStations.Add(MetroStation.Hub, new Vector2Int(0, 0));
+    }
+
+    void updateMetroRooms(Vector2Int currentPos) {
+        if (currentPos.x - 1 < metroStations[MetroStation.Left].x) {
+            metroStations[MetroStation.Left] = new Vector2Int(currentPos.x - 1, currentPos.y);
+        }
+        
+        if (currentPos.x + 1 > metroStations[MetroStation.Right].x) {
+            metroStations[MetroStation.Right] = new Vector2Int(currentPos.x + 1, currentPos.y);
+        }
+
+        if (currentPos.y - 1 < metroStations[MetroStation.Bottom].y) {
+            metroStations[MetroStation.Bottom] = new Vector2Int(currentPos.x, currentPos.y - 1);
+        }
+
+        if (currentPos.y + 1 > metroStations[MetroStation.Top].y) {
+            metroStations[MetroStation.Top] = new Vector2Int(currentPos.x, currentPos.y + 1);
+        }
+    }
+
+    void addMetroRoomsToMap() {
+        map.Add(metroStations[MetroStation.Left], TileType.Metro);
+        map.Add(metroStations[MetroStation.Right], TileType.Metro);
+        map.Add(metroStations[MetroStation.Top], TileType.Metro);
+        map.Add(metroStations[MetroStation.Bottom], TileType.Metro);
+    }
+
     private void GenerateMap()
     {
         List<Vector2Int> roomPositions = new List<Vector2Int>();
         Vector2Int currentPos = new Vector2Int(0, 0);
         HashSet<Vector2Int> availablePos = new HashSet<Vector2Int>();
+
+        getInitialMetroRoomsPosition();
+
         map.Add(currentPos, TileType.Room);
         AddAvailablePositions(new Vector2Int(0, 0), availablePos);
+
         while (roomsToGenerate > 0 && availablePos.Count > 0)
         {
             currentPos = GetRandomPosition(availablePos);
@@ -143,9 +191,14 @@ public class Generator : MonoBehaviour
                     roomsToGenerate--;
                 }
             }
+
+            updateMetroRooms(currentPos);
             AddAvailablePositions(currentPos, availablePos);
             availablePos.Remove(currentPos);
         }
+
+        addMetroRoomsToMap();
+
         if (roomsToGenerate > 0)
             Debug.Log("Could not generate all rooms");
     }
@@ -516,8 +569,110 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private void PlaceMetroRooms(Vector2Int pos) {
+        if (pos == metroStations[MetroStation.Left]) {
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        } else if (pos == metroStations[MetroStation.Right]) {
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        } else if (pos == metroStations[MetroStation.Top]) {
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        } else if (pos == metroStations[MetroStation.Bottom]) {
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+    }
+
+    private void PlaceMetroCorridors() {
+        GameObject metroRoom;
+        Vector2Int pos = metroStations[MetroStation.Left];
+
+        while (pos.y < metroStations[MetroStation.Top].y - 1) {
+            pos.y++;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos.y++;
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+        mapPrefabs.Add(pos, metroRoom);
+
+        while (pos.x < metroStations[MetroStation.Top].x - 1) {
+            pos.x++;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos = metroStations[MetroStation.Top];
+
+        while (pos.x < metroStations[MetroStation.Right].x - 1) {
+            pos.x++;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos.x++;
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+        mapPrefabs.Add(pos, metroRoom);
+
+        while (pos.y > metroStations[MetroStation.Right].y + 1) {
+            pos.y--;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos = metroStations[MetroStation.Right];
+
+        while (pos.y > metroStations[MetroStation.Bottom].y + 1) {
+            pos.y--;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos.y--;
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+        mapPrefabs.Add(pos, metroRoom);
+
+        while (pos.x > metroStations[MetroStation.Bottom].x + 1) {
+            pos.x--;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos = metroStations[MetroStation.Bottom];
+
+        while (pos.x > metroStations[MetroStation.Left].x + 1) {
+            pos.x--;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+
+        pos.x--;
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+        mapPrefabs.Add(pos, metroRoom);
+
+        while (pos.y < metroStations[MetroStation.Left].y - 1) {
+            pos.y++;
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            mapPrefabs.Add(pos, metroRoom);
+        }
+    }
+
+    private void PlaceMetro() {
+        Vector2Int pos = metroStations[MetroStation.Top];
+
+        Instantiate(metro, new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+    }
+
     private void GenerateMapPrefabs()
     {
+        foreach (Vector2Int pos in map.Keys)
+            if (map[pos] == TileType.Metro)
+                PlaceMetroRooms(pos);
+        PlaceMetroCorridors();
+        PlaceMetro();
         foreach (Vector2Int pos in map.Keys)
             if (map[pos] == TileType.Room)
                 PlaceRooms(pos);

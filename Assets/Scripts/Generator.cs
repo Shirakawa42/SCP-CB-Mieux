@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using TMPro;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class Generator : MonoBehaviour
     public List<GameObject> metroRooms;
     public List<GameObject> metroStraightCorridors;
     public List<GameObject> metroAngleCorridors;
+    public GameObject metro;
 
     public List<GameObject> doors;
     public int roomsToGenerate;
@@ -658,12 +660,19 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private void PlaceMetro() {
+        Vector2Int pos = metroStations[MetroStation.Top];
+
+        Instantiate(metro, new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+    }
+
     private void GenerateMapPrefabs()
     {
         foreach (Vector2Int pos in map.Keys)
             if (map[pos] == TileType.Metro)
                 PlaceMetroRooms(pos);
         PlaceMetroCorridors();
+        PlaceMetro();
         foreach (Vector2Int pos in map.Keys)
             if (map[pos] == TileType.Room)
                 PlaceRooms(pos);

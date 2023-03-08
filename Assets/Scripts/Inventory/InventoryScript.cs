@@ -15,11 +15,15 @@ public class InventoryScript : MonoBehaviour
             {
                 inventory.SetActive(false);
                 Globals.isInventoryOpen = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             else
             {
                 inventory.SetActive(true);
                 Globals.isInventoryOpen = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
     }

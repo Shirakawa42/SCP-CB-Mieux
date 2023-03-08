@@ -7,6 +7,7 @@ TagManager:
   - Corridor
   - Door
   - Room
+  - InventorySlot
   layers:
   - Default
   - TransparentFX
@@ -43,4 +44,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 2248975547
     locked: 0

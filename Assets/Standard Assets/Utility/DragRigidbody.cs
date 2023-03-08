@@ -12,6 +12,7 @@ namespace UnityStandardAssets.Utility
         const float k_AngularDrag = 5.0f;
         const float k_Distance = 0.2f;
         const bool k_AttachToCenterOfMass = false;
+        public float range = 1.0f;
 
         private SpringJoint m_SpringJoint;
 
@@ -30,7 +31,7 @@ namespace UnityStandardAssets.Utility
             RaycastHit hit = new RaycastHit();
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 100,
+                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, range,
                                  Physics.DefaultRaycastLayers))
             {
                 return;

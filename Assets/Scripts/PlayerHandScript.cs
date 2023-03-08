@@ -70,7 +70,7 @@ public class PlayerHandScript : MonoBehaviour
         }
         else if (isShowing)
             Hide();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !Globals.isPaused && !Globals.isInventoryOpen)
             if (currentTarget != null)
                 currentTarget.GetComponent<HandTarget>().Click(this);
     }

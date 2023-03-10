@@ -25,86 +25,68 @@ public class MetroMgr : MonoBehaviour
         metro = gameObject;
     }
 
-    private string getMetroCurrentStation(Vector2Int currentPos) {
-        if (currentPos == generator.metroStations[Generator.MetroStation.Top]) {
+    private string getMetroCurrentStation(Vector3 currentPos) {
+        if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position) {
             return "Top";
-        } else if (currentPos == generator.metroStations[Generator.MetroStation.Bottom]) {
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position) {
             return "Bottom";
-        } else if (currentPos == generator.metroStations[Generator.MetroStation.Left]) {
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Left].transform.position) {
             return "Left";
-        } else if (currentPos == generator.metroStations[Generator.MetroStation.Right]) {
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Right].transform.position) {
             return "Right";
         } else {
             return "Unknown";
         }
     }
 
-    private Vector2Int getNextMetroStationPos(Vector2Int currentPos, String direction) {
-        Vector2Int nextPos = currentPos;
-
-        String heightPos = currentPos.y > ((generator.metroStations[Generator.MetroStation.Top].y + generator.metroStations[Generator.MetroStation.Bottom].y))/2 ? "T" : "B";
-        String widthPos = currentPos.x > ((generator.metroStations[Generator.MetroStation.Left].x + generator.metroStations[Generator.MetroStation.Right].x))/2 ? "R" : "L";
-
+    private Vector3 getNextMetroStationPos(Vector3 currentPos, String direction) {
         Debug.Log(getMetroCurrentStation(currentPos));
 
-        if (heightPos == "T") {
-            if (widthPos == "R") {
-                // top (exclu) -> Right (exclu)
-                if (direction == "LEFT") {
-                    Debug.Log("Moving to Top station");
-                    return generator.metroStations[Generator.MetroStation.Top];
-                } else {
-                    Debug.Log("Moving to Right station");
-                    return generator.metroStations[Generator.MetroStation.Right]; 
-                }
+        if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position) {
+            if (direction == "LEFT") {
+                return generator.metroStationPrefabs[Generator.MetroStation.Left].transform.position;
             } else {
-                // Left (exclu) -> Top (inclu)
-                if (direction == "LEFT") {
-                    Debug.Log("Moving to Left station");
-                    return generator.metroStations[Generator.MetroStation.Left];
-                } else {
-                    Debug.Log(currentPos == generator.metroStations[Generator.MetroStation.Top] ?
-                        "Moving to Right station" : "Moving to Top station");
-                    return currentPos == generator.metroStations[Generator.MetroStation.Top] ?
-                        generator.metroStations[Generator.MetroStation.Right] : generator.metroStations[Generator.MetroStation.Top];
-                }
+                return generator.metroStationPrefabs[Generator.MetroStation.Right].transform.position;
+            }
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position) {
+            if (direction == "LEFT") {
+                return generator.metroStationPrefabs[Generator.MetroStation.Right].transform.position;
+            } else {
+                return generator.metroStationPrefabs[Generator.MetroStation.Left].transform.position;
+            }
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Left].transform.position) {
+            if (direction == "LEFT") {
+                return generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position;
+            } else {
+                return generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position;
+            }
+        } else if (currentPos == generator.metroStationPrefabs[Generator.MetroStation.Right].transform.position) {
+            if (direction == "LEFT") {
+                return generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position;
+            } else {
+                return generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position;
             }
         } else {
-            if (widthPos == "R") {
-                // Right (Inclu) -> Bottom (inclu)
-                if (direction == "LEFT") {
-                    if (currentPos == generator.metroStations[Generator.MetroStation.Right]) {
-                        Debug.Log("Moving to Top station");
-                        return generator.metroStations[Generator.MetroStation.Top];
-                    } else {
-                        Debug.Log("Moving to Right station");
-                        return generator.metroStations[Generator.MetroStation.Right];
-                    }
-                } else {
-                    if (currentPos == generator.metroStations[Generator.MetroStation.Bottom]) {
-                        Debug.Log("Moving to Left station");
-                        return generator.metroStations[Generator.MetroStation.Left];
-                    } else {
-                        Debug.Log("Moving to Bottom station");
-                        return generator.metroStations[Generator.MetroStation.Bottom];
-                    }
-                }
-            } else {
-                // Left (inclu) -> botton (exclu)
-                if (direction == "LEFT") {
-                    if (currentPos == generator.metroStations[Generator.MetroStation.Left]) {
-                        Debug.Log("Moving to Top station");
-                        return generator.metroStations[Generator.MetroStation.Top];
-                    } else {
-                        Debug.Log("Moving to Left station");
-                        return generator.metroStations[Generator.MetroStation.Left];
-                    }
-                } else {
-                    Debug.Log("Moving to Bottom station");
-                    return generator.metroStations[Generator.MetroStation.Bottom];
-                }
-            }
+            return currentPos;
         }
+        
+        // @TODO: Better generation
+        // String heightPos = currentPos.z > ((generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position.z + generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position.z))/2 ? "T" : "B";
+        // String widthPos = currentPos.x > ((generator.metroStationPrefabs[Generator.MetroStation.Left].transform.position.x + generator.metroStationPrefabs[Generator.MetroStation.Right].transform.position.x))/2 ? "R" : "L";
+
+        // if (heightPos == "T") {
+        //     if (widthPos == "R") {
+        //         // top (exclu) -> Right (exclu)
+        //     } else {
+        //         // Left (exclu) -> Top (inclu)
+        //     }
+        // } else {
+        //     if (widthPos == "R") {
+        //         // Right (Inclu) -> Bottom (inclu)
+        //     } else {
+        //         // Left (inclu) -> botton (exclu)
+        //     }
+        // }
     }
 
     private void MoveLeft() {
@@ -112,12 +94,11 @@ public class MetroMgr : MonoBehaviour
             return ;
         }
 
-        Vector2Int currentPos = new Vector2Int((int)metro.transform.position.x, (int)metro.transform.position.y);
-        Vector2Int newPos = getNextMetroStationPos(currentPos, "LEFT");
+        Vector3 newPos = getNextMetroStationPos(metro.transform.position, "LEFT");
 
         isMoving = true;
 
-        metro.transform.localPosition = new Vector3(newPos.x, newPos.y, metro.transform.position.z);
+        metro.transform.position = newPos;
 
         isMoving = false;
     }
@@ -127,12 +108,11 @@ public class MetroMgr : MonoBehaviour
             return ;
         }
 
-        Vector2Int currentPos = new Vector2Int((int)metro.transform.position.x, (int)metro.transform.position.y);
-        Vector2Int newPos = getNextMetroStationPos(currentPos, "LEFT");
+        Vector3 newPos = getNextMetroStationPos(metro.transform.position, "RIGHT");
 
         isMoving = true;
 
-        metro.transform.localPosition = new Vector3(newPos.x, newPos.y, metro.transform.position.z);
+        metro.transform.position = newPos;
 
         isMoving = false;
     }

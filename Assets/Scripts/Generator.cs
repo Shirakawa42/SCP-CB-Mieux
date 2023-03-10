@@ -26,7 +26,7 @@ public class Generator : MonoBehaviour
     public int roomsToGenerate;
     public int roomsMinDistance;
     public int corridorDensity;
-    private const int TILE_SIZE = 24;
+    public const int TILE_SIZE = 24;
     public enum TileType { Empty, Room, Corridor, Metro };
     private Dictionary<Vector2Int, TileType> map = new Dictionary<Vector2Int, TileType>();
     private Dictionary<Vector2Int, GameObject> mapPrefabs = new Dictionary<Vector2Int, GameObject>();
@@ -38,6 +38,8 @@ public class Generator : MonoBehaviour
     private int roomsToGenerateSave;
     public enum MetroStation { Left, Right, Top, Bottom, Hub };
     public Dictionary<MetroStation, Vector2Int> metroStations = new Dictionary<MetroStation, Vector2Int>();
+    public Dictionary<MetroStation, GameObject> metroStationPrefabs = new Dictionary<MetroStation, GameObject>();
+    public Dictionary<MetroStation, Vector2> metroStationCoord = new Dictionary<MetroStation, Vector2>();
 
     private int CountNeighbours(Vector2Int pos)
     {
@@ -93,7 +95,6 @@ public class Generator : MonoBehaviour
         }
         return false;
     }
-
     private void getInitialMetroRoomsPosition() {
         metroStations.Add(MetroStation.Left, new Vector2Int(-1, 0));
         metroStations.Add(MetroStation.Right, new Vector2Int(1, 0));
@@ -573,15 +574,23 @@ public class Generator : MonoBehaviour
         if (pos == metroStations[MetroStation.Left]) {
             GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
+            metroStationPrefabs.Add(MetroStation.Left, metroRoom);
+            metroStationCoord.Add(MetroStation.Left, new Vector2(metroRoom.transform.position.x, metroRoom.transform.position.z));
         } else if (pos == metroStations[MetroStation.Right]) {
             GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, metroRoom);
+            metroStationPrefabs.Add(MetroStation.Right, metroRoom);
+            metroStationCoord.Add(MetroStation.Right, new Vector2(metroRoom.transform.position.x, metroRoom.transform.position.z));
         } else if (pos == metroStations[MetroStation.Top]) {
             GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, metroRoom);
+            metroStationPrefabs.Add(MetroStation.Top, metroRoom);
+            metroStationCoord.Add(MetroStation.Top, new Vector2(metroRoom.transform.position.x, metroRoom.transform.position.z));
         } else if (pos == metroStations[MetroStation.Bottom]) {
             GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
+            metroStationPrefabs.Add(MetroStation.Bottom, metroRoom);
+            metroStationCoord.Add(MetroStation.Bottom, new Vector2(metroRoom.transform.position.x, metroRoom.transform.position.z));
         }
     }
 

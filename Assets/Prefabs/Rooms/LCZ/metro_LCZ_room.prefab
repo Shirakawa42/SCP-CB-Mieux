@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3632152413790768375}
   - component: {fileID: 3632152413790768368}
   - component: {fileID: 6969436708846397452}
+  - component: {fileID: 6463135322725624310}
   m_Layer: 0
   m_Name: metro_LCZ_room
   m_TagString: Untagged
@@ -8855,10 +8856,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3632152413790768369}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!114 &6969436708846397452
@@ -8877,6 +8878,18 @@ MonoBehaviour:
   yplus: 1
   xminus: 0
   yminus: 0
+--- !u!114 &6463135322725624310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3632152413790768369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c48cd3579a2d2c64babfedeb69b80613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7825213595148038363
 GameObject:
   m_ObjectHideFlags: 0

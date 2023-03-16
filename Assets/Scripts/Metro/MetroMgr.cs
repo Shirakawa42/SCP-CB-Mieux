@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MetroMgr : MonoBehaviour
@@ -12,6 +13,8 @@ public class MetroMgr : MonoBehaviour
 
     Vector3 lastPosition;
     Vector3 onGoingPosition;
+    float speed = 60f;
+    float rotationSpeed = 20f;
 
     // Start is called before the first frame update
     void Start()
@@ -156,13 +159,88 @@ public class MetroMgr : MonoBehaviour
         return generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position;
     }
 
-    IEnumerator MoveToPosition()
+
+    private void MoveUpdate(Vector3 targetPosition)
     {
-        while (metro.transform.position != onGoingPosition && isMoving)
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+    }
+
+    private void OnMoveComplete(Quaternion targetRotation)
+    {
+        transform.rotation = targetRotation;
+    }
+
+    IEnumerator MoveToPosition(Direction direction)
+    {
+        Boolean firstDirection = false;
+        Boolean xPos = metro.transform.position.x > onGoingPosition.x ? true : false;
+        Boolean zPos = metro.transform.position.z > onGoingPosition.z ? true : false;
+
+        if (metro.transform.position.z == generator.metroStationPrefabs[Generator.MetroStation.Top].transform.position.z || metro.transform.position.z == generator.metroStationPrefabs[Generator.MetroStation.Bottom].transform.position.z)
         {
-            metro.transform.position = Vector3.MoveTowards(metro.transform.position, onGoingPosition, Time.deltaTime * 50f);
-            yield return null;
+            firstDirection = true;
         }
+
+        if (firstDirection)
+        {
+            Vector3 firstPosition = xPos ? new Vector3(onGoingPosition.x + Generator.TILE_SIZE, metro.transform.position.y, metro.transform.position.z) : new Vector3(onGoingPosition.x - Generator.TILE_SIZE, metro.transform.position.y, metro.transform.position.z);
+
+            while (isMoving && ((xPos && metro.transform.position.x != onGoingPosition.x + Generator.TILE_SIZE) || (!xPos && metro.transform.position.x != onGoingPosition.x - Generator.TILE_SIZE)))
+            {
+                metro.transform.position = Vector3.MoveTowards(metro.transform.position, firstPosition, Time.deltaTime * speed);
+                yield return null;
+            }
+
+
+            // Define the target position and rotation
+            Vector3 targetPosition = new Vector3(onGoingPosition.x, metro.transform.position.y, metro.transform.position.z - Generator.TILE_SIZE);
+            Quaternion targetRotation = Quaternion.Euler(0f, 135f, 0f);
+
+            Hashtable args = new Hashtable();
+
+            args.Add("position", new Vector3(onGoingPosition.x, metro.transform.position.y, metro.transform.position.z - Generator.TILE_SIZE));
+            args.Add("time", 1f);
+            args.Add("easetype", iTween.EaseType.linear);
+            args.Add("onupdate", "MoveUpdate");
+            args.Add("onupdateparams", targetPosition);
+            args.Add("oncomplete", "OnMoveComplete");
+            args.Add("oncompleteparams", targetRotation);
+
+            iTween.MoveTo(this.gameObject, args);
+
+
+
+            // Vector3 secondPosition = new Vector3(metro.transform.position.x, metro.transform.position.y, onGoingPosition.z);
+
+            // while (isMoving && metro.transform.position.z != onGoingPosition.z)
+            // {
+            //     metro.transform.position = Vector3.MoveTowards(metro.transform.position, secondPosition, Time.deltaTime * speed);
+            //     yield return null;
+            // }
+        }
+        else
+        {
+            Vector3 firstPosition = zPos ? new Vector3(metro.transform.position.x, metro.transform.position.y, onGoingPosition.z + Generator.TILE_SIZE) : new Vector3(metro.transform.position.x, metro.transform.position.y, onGoingPosition.z - Generator.TILE_SIZE);
+
+            while (isMoving && ((zPos && metro.transform.position.z != onGoingPosition.z + Generator.TILE_SIZE) || (!zPos && metro.transform.position.z != onGoingPosition.z - Generator.TILE_SIZE)))
+            {
+                metro.transform.position = Vector3.MoveTowards(metro.transform.position, firstPosition, Time.deltaTime * speed);
+                yield return null;
+            }
+
+            // I have a metro, his position is metro.transform.position, I'm at a corner, I want it to go through the corner (which the end is at Vector3(onGoingPosition.x, metro.transform.position.y, metro.transform.position.z)) and then go to the next position (which is Vector3(onGoingPosition.x, onGoingPosition.y, onGoingPosition.z))
+            // Code it but it should be smooth as a metro
+
+            Vector3 secondPosition = new Vector3(onGoingPosition.x, metro.transform.position.y, metro.transform.position.z);
+
+            while (isMoving && metro.transform.position.x != onGoingPosition.x)
+            {
+                metro.transform.position = Vector3.MoveTowards(metro.transform.position, secondPosition, Time.deltaTime * speed);
+                yield return null;
+            }
+        }
+
         lastPosition = onGoingPosition;
         isMoving = false;
     }
@@ -177,7 +255,7 @@ public class MetroMgr : MonoBehaviour
         onGoingPosition = getNextMetroStationPos(direction);
         isMoving = true;
 
-        StartCoroutine(MoveToPosition());
+        StartCoroutine(MoveToPosition(direction));
     }
 
     private void Stop()
@@ -191,13 +269,11 @@ public class MetroMgr : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.J))
         {
             Move(Direction.LEFT);
-            Debug.Log("LEFT -> " + getMetroCurrentStation(metro.transform.position));
         }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
             Move(Direction.RIGHT);
-            Debug.Log("AFTER RIGHT -> " + getMetroCurrentStation(metro.transform.position));
         }
 
         if (Input.GetKeyDown(KeyCode.K))

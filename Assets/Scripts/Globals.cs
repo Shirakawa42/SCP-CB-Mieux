@@ -6,6 +6,7 @@ public static class Globals
 {
     public static bool isPaused = false;
     public static bool isInventoryOpen = false;
+    public static bool mapPrefabsLoaded = false;
     
 
     // inventory dragging

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ButtonScript : HandTarget
 {
-    public float clickCooldown = 1f;
+    public const float clickCooldown = 1f;
     private float currentClickCooldown = 0f;
     private bool isEnable = true;
+    private const float autoCloseTime = 3f;
+    private float currentAutoCloseTime = 0f;
 
     void OnTriggerEnter(Collider other)
     {

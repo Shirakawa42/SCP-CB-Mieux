@@ -7,7 +7,7 @@ public static class Globals
     public static bool isPaused = false;
     public static bool isInventoryOpen = false;
     public static bool mapPrefabsLoaded = false;
-    
+    public const int TILE_SIZE = 24;
 
     // inventory dragging
     public static bool isDragging = false;
@@ -16,4 +16,7 @@ public static class Globals
     public static int slotIndexBeingDragged = 0;
     public static bool isEquipped = false;
     //////////////////////
+
+    public static GameObject player;
+    public static GameObject gameManager;
 }

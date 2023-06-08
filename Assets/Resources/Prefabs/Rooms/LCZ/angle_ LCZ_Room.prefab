@@ -8103,6 +8103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5956748645261982786}
   - component: {fileID: 3869182735839516988}
+  - component: {fileID: -6315967277914553460}
   m_Layer: 0
   m_Name: angle_ LCZ_Room
   m_TagString: Untagged
@@ -8142,6 +8143,21 @@ MonoBehaviour:
   yplus: 1
   xminus: 1
   yminus: 0
+--- !u!114 &-6315967277914553460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6288412957592859494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553545085aa66e44b0847fcb17a0fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  high: []
+  medium: []
+  low: []
 --- !u!1001 &5653406348760033099
 PrefabInstance:
   m_ObjectHideFlags: 0

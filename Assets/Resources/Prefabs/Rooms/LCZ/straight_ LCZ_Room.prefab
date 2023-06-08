@@ -8390,6 +8390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2870306077818419533}
   - component: {fileID: 1921122875173265321}
+  - component: {fileID: 89601720824204950}
   m_Layer: 0
   m_Name: straight_ LCZ_Room
   m_TagString: Untagged
@@ -8429,6 +8430,21 @@ MonoBehaviour:
   yplus: 1
   xminus: 0
   yminus: 1
+--- !u!114 &89601720824204950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2897619151105558550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553545085aa66e44b0847fcb17a0fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  high: []
+  medium: []
+  low: []
 --- !u!1 &5449717687962080220
 GameObject:
   m_ObjectHideFlags: 0

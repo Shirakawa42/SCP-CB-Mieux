@@ -7550,6 +7550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8398509920375489504}
   - component: {fileID: 7526125685432777542}
+  - component: {fileID: 7808425825337501396}
   m_Layer: 0
   m_Name: 3ways_ LCZ_Room
   m_TagString: Untagged
@@ -7589,6 +7590,21 @@ MonoBehaviour:
   yplus: 1
   xminus: 1
   yminus: 0
+--- !u!114 &7808425825337501396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8532760989335618155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553545085aa66e44b0847fcb17a0fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  high: []
+  medium: []
+  low: []
 --- !u!1 &8586811268373605078
 GameObject:
   m_ObjectHideFlags: 0

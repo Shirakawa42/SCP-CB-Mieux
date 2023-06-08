@@ -8944,6 +8944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7830985882662857160}
   - component: {fileID: 3985863696295038065}
+  - component: {fileID: 4160768630181384827}
   m_Layer: 0
   m_Name: metro_LCZ_room
   m_TagString: Untagged
@@ -8983,6 +8984,21 @@ MonoBehaviour:
   yplus: 1
   xminus: 0
   yminus: 0
+--- !u!114 &4160768630181384827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5480540561629875289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553545085aa66e44b0847fcb17a0fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  high: []
+  medium: []
+  low: []
 --- !u!1001 &264247557758791866
 PrefabInstance:
   m_ObjectHideFlags: 0

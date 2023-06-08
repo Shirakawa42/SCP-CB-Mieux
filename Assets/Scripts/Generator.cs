@@ -22,7 +22,7 @@ public class Generator : MonoBehaviour
     public int roomsToGenerate;
     public int roomsMinDistance;
     public int corridorDensity;
-    public const int TILE_SIZE = 24;
+    
     public enum TileType { Empty, Room, Corridor, Metro };
     private Dictionary<Vector2Int, TileType> map = new Dictionary<Vector2Int, TileType>();
     public Dictionary<Vector2Int, GameObject> mapPrefabs = new Dictionary<Vector2Int, GameObject>();
@@ -331,7 +331,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -339,7 +339,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject corridor = Instantiate(straightCorridors[Random.Range(0, straightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -347,7 +347,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -355,7 +355,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -363,7 +363,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -371,7 +371,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject corridor = Instantiate(angleCorridors[Random.Range(0, angleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -379,7 +379,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -387,7 +387,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -395,7 +395,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -403,12 +403,12 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject corridor = Instantiate(threeWayCorridors[Random.Range(0, threeWayCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, corridor);
         }
         else
         {
-            GameObject corridor = Instantiate(fourWayCorridors[Random.Range(0, fourWayCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject corridor = Instantiate(fourWayCorridors[Random.Range(0, fourWayCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, corridor);
         }
     }
@@ -420,7 +420,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -428,7 +428,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject room = Instantiate(straightRooms[Random.Range(0, straightRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -436,7 +436,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -444,7 +444,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -452,7 +452,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -460,7 +460,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject room = Instantiate(angleRooms[Random.Range(0, angleRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -468,7 +468,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -476,7 +476,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -484,7 +484,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -492,7 +492,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject room = Instantiate(threeWayRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -500,7 +500,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -508,7 +508,7 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -516,7 +516,7 @@ public class Generator : MonoBehaviour
             && CheckNeighbour(pos, new Vector2Int(0, 1))
             && !CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, room);
         }
         else if (!CheckNeighbour(pos, new Vector2Int(1, 0))
@@ -524,12 +524,12 @@ public class Generator : MonoBehaviour
             && !CheckNeighbour(pos, new Vector2Int(0, 1))
             && CheckNeighbour(pos, new Vector2Int(0, -1)))
         {
-            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject room = Instantiate(deadendRooms[Random.Range(0, threeWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, room);
         }
         else
         {
-            GameObject room = Instantiate(fourWayRooms[Random.Range(0, fourWayRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject room = Instantiate(fourWayRooms[Random.Range(0, fourWayRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, room);
         }
     }
@@ -542,27 +542,43 @@ public class Generator : MonoBehaviour
             {
                 if (CheckNeighbour(pos, new Vector2Int(1, 0)))
                 {
-                    Vector3 doorPos = new Vector3(pos.x * TILE_SIZE + TILE_SIZE / 2, 0, pos.y * TILE_SIZE);
+                    Vector3 doorPos = new Vector3(pos.x * Globals.TILE_SIZE + Globals.TILE_SIZE / 2, 0, pos.y * Globals.TILE_SIZE);
                     if (!allDoors.ContainsKey(doorPos))
+                    {
                         allDoors.Add(doorPos, Instantiate(doors[Random.Range(0, doors.Count)], doorPos, Quaternion.Euler(0, 90, 0)));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x + 1, pos.y));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y));
+                    }
                 }
                 if (CheckNeighbour(pos, new Vector2Int(-1, 0)))
                 {
-                    Vector3 doorPos = new Vector3(pos.x * TILE_SIZE - TILE_SIZE / 2, 0, pos.y * TILE_SIZE);
+                    Vector3 doorPos = new Vector3(pos.x * Globals.TILE_SIZE - Globals.TILE_SIZE / 2, 0, pos.y * Globals.TILE_SIZE);
                     if (!allDoors.ContainsKey(doorPos))
+                    {
                         allDoors.Add(doorPos, Instantiate(doors[Random.Range(0, doors.Count)], doorPos, Quaternion.Euler(0, 90, 0)));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x - 1, pos.y));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y));
+                    }
                 }
                 if (CheckNeighbour(pos, new Vector2Int(0, 1)))
                 {
-                    Vector3 doorPos = new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE + TILE_SIZE / 2);
+                    Vector3 doorPos = new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE + Globals.TILE_SIZE / 2);
                     if (!allDoors.ContainsKey(doorPos))
+                    {
                         allDoors.Add(doorPos, Instantiate(doors[Random.Range(0, doors.Count)], doorPos, Quaternion.Euler(0, 0, 0)));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y + 1));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y));
+                    }
                 }
                 if (CheckNeighbour(pos, new Vector2Int(0, -1)))
                 {
-                    Vector3 doorPos = new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE - TILE_SIZE / 2);
+                    Vector3 doorPos = new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE - Globals.TILE_SIZE / 2);
                     if (!allDoors.ContainsKey(doorPos))
+                    {
                         allDoors.Add(doorPos, Instantiate(doors[Random.Range(0, doors.Count)], doorPos, Quaternion.Euler(0, 0, 0)));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y - 1));
+                        allDoors[doorPos].GetComponentInChildren<DoorScript>().linkedTiles.Add(new Vector2Int(pos.x, pos.y));
+                    }
                 }
             }
         }
@@ -572,22 +588,22 @@ public class Generator : MonoBehaviour
     {
         if (pos == metroStations[MetroStation.Left])
         {
-            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
         else if (pos == metroStations[MetroStation.Right])
         {
-            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
         else if (pos == metroStations[MetroStation.Top])
         {
-            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
         else if (pos == metroStations[MetroStation.Bottom])
         {
-            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            GameObject metroRoom = Instantiate(metroRooms[Random.Range(0, metroRooms.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
     }
@@ -600,18 +616,18 @@ public class Generator : MonoBehaviour
         while (pos.y < metroStations[MetroStation.Top].y - 1)
         {
             pos.y++;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
         pos.y++;
-        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
         mapPrefabs.Add(pos, metroRoom);
 
         while (pos.x < metroStations[MetroStation.Top].x - 1)
         {
             pos.x++;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
@@ -620,18 +636,18 @@ public class Generator : MonoBehaviour
         while (pos.x < metroStations[MetroStation.Right].x - 1)
         {
             pos.x++;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
         pos.x++;
-        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
         mapPrefabs.Add(pos, metroRoom);
 
         while (pos.y > metroStations[MetroStation.Right].y + 1)
         {
             pos.y--;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
@@ -640,18 +656,18 @@ public class Generator : MonoBehaviour
         while (pos.y > metroStations[MetroStation.Bottom].y + 1)
         {
             pos.y--;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
         pos.y--;
-        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 180, 0));
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 180, 0));
         mapPrefabs.Add(pos, metroRoom);
 
         while (pos.x > metroStations[MetroStation.Bottom].x + 1)
         {
             pos.x--;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
@@ -660,18 +676,18 @@ public class Generator : MonoBehaviour
         while (pos.x > metroStations[MetroStation.Left].x + 1)
         {
             pos.x--;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
 
         pos.x--;
-        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 270, 0));
+        metroRoom = Instantiate(metroAngleCorridors[Random.Range(0, metroAngleCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 270, 0));
         mapPrefabs.Add(pos, metroRoom);
 
         while (pos.y < metroStations[MetroStation.Left].y - 1)
         {
             pos.y++;
-            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 0, 0));
+            metroRoom = Instantiate(metroStraightCorridors[Random.Range(0, metroStraightCorridors.Count)], new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 0, 0));
             mapPrefabs.Add(pos, metroRoom);
         }
     }
@@ -680,7 +696,7 @@ public class Generator : MonoBehaviour
     {
         Vector2Int pos = metroStations[MetroStation.Top];
 
-        Instantiate(metro, new Vector3(pos.x * TILE_SIZE, 0, pos.y * TILE_SIZE), Quaternion.Euler(0, 90, 0));
+        Instantiate(metro, new Vector3(pos.x * Globals.TILE_SIZE, 0, pos.y * Globals.TILE_SIZE), Quaternion.Euler(0, 90, 0));
     }
 
     private void GenerateMapPrefabs()
@@ -701,17 +717,25 @@ public class Generator : MonoBehaviour
 
     void Start()
     {
+        Globals.player = GameObject.FindGameObjectWithTag("Player");
+        Globals.gameManager = this.gameObject;
         roomsToGenerateSave = roomsToGenerate;
         GenerateMap();
         while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns()) ;
         GenerateMapPrefabs();
         Globals.mapPrefabsLoaded = true;
+        foreach (Vector2Int v in mapPrefabs.Keys)
+            mapPrefabs[v].SetActive(false);
+        foreach (Vector3 v in allDoors.Keys)
+            allDoors[v].SetActive(false);
+        mapPrefabs[Globals.player.GetComponent<PlayerStats>().getPlayerTile()].GetComponent<PrefabState>().SetLOD(LOD.Full);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Globals.mapPrefabsLoaded = false;
             foreach (GameObject obj in mapPrefabs.Values)
                 Destroy(obj);
             foreach (GameObject obj in allDoors.Values)
@@ -723,6 +747,12 @@ public class Generator : MonoBehaviour
             GenerateMap();
             while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns()) ;
             GenerateMapPrefabs();
+            Globals.mapPrefabsLoaded = true;
+            foreach (Vector2Int v in mapPrefabs.Keys)
+                mapPrefabs[v].SetActive(false);
+            foreach (Vector3 v in allDoors.Keys)
+                allDoors[v].SetActive(false);
+            mapPrefabs[Globals.player.GetComponent<PlayerStats>().getPlayerTile()].GetComponent<PrefabState>().SetLOD(LOD.Full);
         }
     }
 }

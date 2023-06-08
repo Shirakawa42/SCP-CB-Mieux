@@ -84,6 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 635933435163432928}
   - component: {fileID: 779604198588576994}
+  - component: {fileID: -4232477646744152707}
   m_Layer: 0
   m_Name: deadend_ LCZ_Room
   m_TagString: Untagged
@@ -123,6 +124,21 @@ MonoBehaviour:
   yplus: 1
   xminus: 0
   yminus: 0
+--- !u!114 &-4232477646744152707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6296361593789421097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553545085aa66e44b0847fcb17a0fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  high: []
+  medium: []
+  low: []
 --- !u!1 &7365890762897173052
 GameObject:
   m_ObjectHideFlags: 0

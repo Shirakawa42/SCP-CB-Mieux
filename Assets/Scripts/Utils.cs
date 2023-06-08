@@ -11,4 +11,9 @@ public static class Utils
 
         return new Vector2Int(x, y);
     }
+
+    public static Vector3 TileToWorldPosition(Vector2Int tile)
+    {
+        return new Vector3(tile.x * Globals.TILE_SIZE, 0, tile.y * Globals.TILE_SIZE);
+    }
 }

@@ -10,7 +10,7 @@ public class DoorScript : MonoBehaviour
     private const float autoCloseTime = 3f;
     private float currentAutoCloseTime = 0f;
     private bool isOpen = false;
-    private Generator generator;
+    private MapPrefabs mapPrefabs;
 
     public List<Vector2Int> linkedTiles = new List<Vector2Int>();
     public bool isFullyClosed = true;
@@ -18,15 +18,18 @@ public class DoorScript : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        generator = GameObject.Find("GameManager").GetComponent<Generator>();
+        mapPrefabs = GameObject.Find("GameManager").GetComponent<MapPrefabs>();
     }
 
-    private void SetLinkedTilesLOD(LOD lod)
+    private void EnableLinkedTiles(bool enable)
     {
         foreach (Vector2Int tile in linkedTiles)
         {
             if (tile != Globals.player.GetComponent<PlayerStats>().getPlayerTile())
-                generator.mapPrefabs[tile].GetComponent<PrefabState>().SetLOD(lod);
+                if (enable)
+                    mapPrefabs.EnableTile(tile);
+                else
+                    mapPrefabs.DisableTile(tile);
         }
     }
 
@@ -36,7 +39,7 @@ public class DoorScript : MonoBehaviour
         {
             currentCooldown = cooldown;
             isFullyClosed = false;
-            SetLinkedTilesLOD(LOD.Full);
+            EnableLinkedTiles(true);
             if (isOpen)
             {
                 anim.SetTrigger("close");
@@ -58,7 +61,7 @@ public class DoorScript : MonoBehaviour
         else if (!isFullyClosed && !isOpen)
         {
             isFullyClosed = true;
-            SetLinkedTilesLOD(LOD.None);
+            EnableLinkedTiles(false);
         }
         if (isOpen)
         {

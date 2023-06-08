@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TileType { Empty, Room, Corridor, Metro };
+
 public static class Globals
 {
     public static bool isPaused = false;
     public static bool isInventoryOpen = false;
-    public static bool mapPrefabsLoaded = false;
     public const int TILE_SIZE = 24;
+    public const int SEED = 1234;
 
     // inventory dragging
     public static bool isDragging = false;

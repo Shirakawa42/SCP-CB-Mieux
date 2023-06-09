@@ -10,8 +10,8 @@ public abstract class InventoryItem : MonoBehaviour
     abstract public GameObject Prefab { get; }
     abstract public EquipmentType EquipmentType { get; }
     abstract public int MaxStack { get; }
-    abstract public bool Equiped { get; }
+    abstract public InventorySlot slot { get; set; }
 
-    abstract public void UseOrEquip();
-    abstract public void OnUnequip();
+    abstract public void UseOrEquip(PlayerStats playerStats);
+    abstract public void OnUnequip(PlayerStats playerStats);
 }

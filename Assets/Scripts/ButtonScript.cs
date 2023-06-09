@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ButtonScript : HandTarget
 {
-    public float clickCooldown = 1f;
+    public const float clickCooldown = .6f;
     private float currentClickCooldown = 0f;
     private bool isEnable = true;
 

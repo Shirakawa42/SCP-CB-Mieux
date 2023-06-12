@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 1204149811}
   - component: {fileID: 1204149816}
   - component: {fileID: 1204149817}
+  - component: {fileID: 1204149819}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -865,7 +866,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &308326206
 Transform:
   m_ObjectHideFlags: 0
@@ -1114,6 +1115,37 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: fb8effecb2947e14a9faacab06758167, type: 2}
+--- !u!1 &322778992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 322778993}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &322778993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322778992}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &441107416
 GameObject:
   m_ObjectHideFlags: 0
@@ -2007,6 +2039,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1204149819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155290459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b933e83061d16604495194f707d9f096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1204777428
 GameObject:
   m_ObjectHideFlags: 0
@@ -2265,7 +2309,7 @@ GameObject:
   - component: {fileID: 1404712568}
   - component: {fileID: 1404712569}
   - component: {fileID: 1404712571}
-  - component: {fileID: 1404712570}
+  - component: {fileID: 1404712573}
   - component: {fileID: 1404712572}
   m_Layer: 0
   m_Name: GameManager
@@ -2385,19 +2429,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1404712570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1404712566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 354cf25cf44dcfd458fa81a7fca8b886, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxPrefabOnHoldPerType: 1
 --- !u!114 &1404712571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2412,7 +2443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   straightCorridors:
   - {fileID: 8118726056229448067, guid: 04fff27b905bea443ac2593e4c66d592, type: 3}
-  - {fileID: 1606620075803483285, guid: d242f8402d9db6f4fb1a8c951d15e3c1, type: 3}
+  - {fileID: 9096679030095263580, guid: d242f8402d9db6f4fb1a8c951d15e3c1, type: 3}
   angleCorridors:
   - {fileID: 6141405883390754911, guid: baee1205fac27554cab02192cbb26807, type: 3}
   threeWayCorridors:
@@ -2439,8 +2470,8 @@ MonoBehaviour:
   doors:
   - {fileID: 7893747798100936529, guid: 3bc7026968374ec4eadf32dc1a52e56b, type: 3}
   metro: {fileID: 3462090868808696000, guid: 7955cd9742a2bc042b2cc3210a00576f, type: 3}
-  prefabsPool: {fileID: 1404712570}
   generator: {fileID: 1404712572}
+  smoothInstantiator: {fileID: 1404712573}
 --- !u!114 &1404712572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2456,6 +2487,18 @@ MonoBehaviour:
   roomsToGenerate: 20
   roomsMinDistance: 2
   corridorDensity: 50
+--- !u!114 &1404712573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404712566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8328a044c026c749a77f87822bb3595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1420497532
 GameObject:
   m_ObjectHideFlags: 0
@@ -3044,7 +3087,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 60
+  far clip plane: 500
   field of view: 60
   orthographic: 0
   orthographic size: 5

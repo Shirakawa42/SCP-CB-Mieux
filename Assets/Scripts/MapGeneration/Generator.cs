@@ -273,6 +273,16 @@ public class Generator : MonoBehaviour
         return false;
     }
 
+    void InstantiateMap()
+    {
+        foreach (Vector2Int pos in map.Keys)
+        {
+            if (pos != new Vector2Int(0, 0))
+                mapPrefabs.SetTileInstant(pos, 4);
+        }
+        mapPrefabs.SetTileInstant(Globals.player.GetComponent<PlayerStats>().getPlayerTile(), 1);
+    }
+
     void Start()
     {
         mapPrefabs = GetComponent<MapPrefabs>();
@@ -282,19 +292,7 @@ public class Generator : MonoBehaviour
         GenerateMap();
         while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns()) ;
         mapPrefabs.GeneratePrefabs(map);
-        mapPrefabs.EnableTile(Globals.player.GetComponent<PlayerStats>().getPlayerTile());
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            map.Clear();
-            roomsToGenerate = roomsToGenerateSave;
-            GenerateMap();
-            while (RemoveUselessCorridors() || RemoveUselessCorridorsPatterns()) ;
-            GetComponent<MapPrefabs>().GeneratePrefabs(map);
-            mapPrefabs.GeneratePrefabs(map);
-        }
+        InstantiateMap();
+        Globals.isGameLoaded = true;
     }
 }

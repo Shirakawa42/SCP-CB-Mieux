@@ -40,7 +40,7 @@ public class SmoothInstantiator : MonoBehaviour
 
     public Dictionary<Vector3, GameObject> instantiatedObjects = new Dictionary<Vector3, GameObject>();
     private Queue<PrefabInfos> instantiatorQueue = new Queue<PrefabInfos>();
-    private Queue<ChildrenInfo> childrenQueue = new Queue<ChildrenInfo>();
+    private DoorPool doorPool;
 
     public void InstantiatePrefab(PrefabType type, Vector3 position, int lod, bool isDoor = false, Vector3 doorOffset = new Vector3())
     {
@@ -55,6 +55,24 @@ public class SmoothInstantiator : MonoBehaviour
             instantiatedObjects.Add(position, prefab);
         }
         SetLOD(new PrefabInfos(type, position, lod, isDoor, doorOffset), instantiatedObjects[position]);
+    }
+
+    public void AddDoor(PrefabType type, Vector3 position)
+    {
+        if (!instantiatedObjects.ContainsKey(position))
+        {
+            GameObject prefab = doorPool.PlaceDoor(position, type.rotation, type.prefab);
+            instantiatedObjects.Add(position, prefab);
+        }
+    }
+
+    public void RemoveDoor(Vector3 position, PrefabType type)
+    {
+        if (instantiatedObjects.ContainsKey(position))
+        {
+            doorPool.ReturnDoor(instantiatedObjects[position], type.prefab);
+            instantiatedObjects.Remove(position);
+        }
     }
 
     IEnumerator SmoothInstantiatorCoroutine()
@@ -75,31 +93,6 @@ public class SmoothInstantiator : MonoBehaviour
         }
     }
 
-    IEnumerator SmoothChildrenInstantiatorCoroutine()
-    {
-        while (true)
-        {
-            if (childrenQueue.Count > 0)
-            {
-                ChildrenInfo childrenInfo = childrenQueue.Dequeue();
-                if (instantiatedObjects.ContainsKey(childrenInfo.position))
-                {
-                    Transform LODTransform = Instantiate(new GameObject("LOD " + childrenInfo.lod.ToString()), instantiatedObjects[childrenInfo.position].transform).transform;
-                    LODTransform.localPosition = Vector3.zero;
-                    Debug.Log(childrenInfo.template.transform.childCount);
-                    foreach (Transform child in childrenInfo.template.transform)
-                    {
-                        GameObject newChild = Instantiate(child.gameObject, LODTransform);
-                        newChild.transform.localPosition = child.localPosition;
-                        newChild.name = child.name;
-                        yield return new WaitForSeconds(0.1f);
-                    }
-                }
-            }
-            yield return null;
-        }
-    }
-
     private void SetLOD(PrefabInfos prefabInfos, GameObject parent)
     {
         int currentLOD = GetCurrentLOD(parent);
@@ -111,13 +104,8 @@ public class SmoothInstantiator : MonoBehaviour
             for (int i = currentLOD - 1; i >= prefabInfos.lod; i--)
             {
                 Transform lodTransform = parent.transform.Find("LOD " + i.ToString());
-                if (lodTransform == null)
-                {
-                    // Instantiate missing LOD from the original prefab
-                    Transform originalLodTransform = prefabInfos.type.prefab.transform.Find("LOD " + i.ToString());
-                    if (originalLodTransform != null)
-                        childrenQueue.Enqueue(new ChildrenInfo(prefabInfos.position, parent, originalLodTransform.gameObject, i));
-                }
+                if (lodTransform)
+                    lodTransform.gameObject.SetActive(true);
             }
         }
         else if (currentLOD < prefabInfos.lod)
@@ -126,10 +114,8 @@ public class SmoothInstantiator : MonoBehaviour
             for (int i = currentLOD; i < prefabInfos.lod; i++)
             {
                 Transform lodTransform = parent.transform.Find("LOD " + i.ToString());
-                if (lodTransform != null)
-                {
-                    Destroy(lodTransform.gameObject);
-                }
+                if (lodTransform)
+                    lodTransform.gameObject.SetActive(false);
             }
         }
     }
@@ -139,6 +125,8 @@ public class SmoothInstantiator : MonoBehaviour
         int currentLOD = int.MaxValue;
         foreach (Transform child in parent.transform)
         {
+            if (!child.gameObject.activeSelf)
+                continue;
             string[] splitName = child.name.Split(' ');
             if (splitName[0] == "LOD")
             {
@@ -155,7 +143,7 @@ public class SmoothInstantiator : MonoBehaviour
 
     void Start()
     {
+        doorPool = GetComponent<DoorPool>();
         StartCoroutine(SmoothInstantiatorCoroutine());
-        StartCoroutine(SmoothChildrenInstantiatorCoroutine());
     }
 }

@@ -278,6 +278,11 @@ public class Generator : MonoBehaviour
         foreach (Vector2Int pos in map.Keys)
         {
             if (pos != new Vector2Int(0, 0))
+                mapPrefabs.SetTileInstant(pos, 1);
+        }
+        foreach (Vector2Int pos in map.Keys)
+        {
+            if (pos != new Vector2Int(0, 0))
                 mapPrefabs.SetTileInstant(pos, 4);
         }
         mapPrefabs.SetTileInstant(Globals.player.GetComponent<PlayerStats>().getPlayerTile(), 1);

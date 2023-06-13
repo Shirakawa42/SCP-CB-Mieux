@@ -8,11 +8,13 @@ public struct PrefabType
 {
     public GameObject prefab;
     public Quaternion rotation;
+    public bool isOpenedDoor;
 
-    public PrefabType(GameObject prefab, Quaternion rotation)
+    public PrefabType(GameObject prefab, Quaternion rotation, bool isOpenedDoor = false)
     {
         this.prefab = prefab;
         this.rotation = rotation;
+        this.isOpenedDoor = isOpenedDoor;
     }
 }
 
@@ -20,7 +22,7 @@ public class MapPrefabs : MonoBehaviour
 {
     private Dictionary<Vector2Int, TileType> map;
     private Dictionary<Vector2Int, PrefabType> mapPrefabsType = new Dictionary<Vector2Int, PrefabType>();
-    private Dictionary<Vector3, PrefabType> doorPrefabsType = new Dictionary<Vector3, PrefabType>();
+    public Dictionary<Vector3, PrefabType> doorPrefabsType = new Dictionary<Vector3, PrefabType>();
     public List<GameObject> straightCorridors;
     public List<GameObject> angleCorridors;
     public List<GameObject> threeWayCorridors;
@@ -37,6 +39,8 @@ public class MapPrefabs : MonoBehaviour
     public GameObject metro;
     public Generator generator;
     public SmoothInstantiator smoothInstantiator;
+    public int doorLod = 2;
+    
 
     private void PlaceMetroRooms(Vector2Int pos)
     {
@@ -392,6 +396,24 @@ public class MapPrefabs : MonoBehaviour
 
     public void SetTile(Vector2Int pos, int lod)
     {
+        if (lod <= this.doorLod)
+        {
+            Vector3[] doorPositions = Utils.getDoorPositionsInTile(pos);
+            foreach (Vector3 doorPosition in doorPositions)
+            {
+                if (doorPrefabsType.ContainsKey(doorPosition))
+                    smoothInstantiator.AddDoor(doorPrefabsType[doorPosition], doorPosition);
+            }
+        }
+        else
+        {
+            Vector3[] doorPositions = Utils.getDoorPositionsInTile(pos);
+            foreach (Vector3 doorPosition in doorPositions)
+            {
+                if (doorPrefabsType.ContainsKey(doorPosition))
+                    smoothInstantiator.RemoveDoor(doorPosition, doorPrefabsType[doorPosition]);
+            }
+        }
         if (mapPrefabsType.ContainsKey(pos))
             smoothInstantiator.InstantiatePrefab(mapPrefabsType[pos], Utils.TileToWorldPosition(pos), lod);
     }
@@ -420,6 +442,6 @@ public class MapPrefabs : MonoBehaviour
                 PlaceCorridor(pos);
         PlaceDoors();
         foreach (Vector2Int pos in mapPrefabsType.Keys)
-            mapPrefabsType[pos].prefab.SetActive(false);
+            mapPrefabsType[pos].prefab.SetActive(true);
     }
 }

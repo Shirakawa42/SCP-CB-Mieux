@@ -9,7 +9,8 @@ public static class Globals
     public static bool isPaused = false;
     public static bool isInventoryOpen = false;
     public const int TILE_SIZE = 24;
-    public const int SEED = 1234;
+    public const int SEED = 64532;
+    public static bool isGameLoaded = false;
 
     // inventory dragging
     public static bool isDragging = false;

@@ -7,12 +7,9 @@ public class DoorScript : MonoBehaviour
     private Animator anim;
     private const float cooldown = .6f;
     private float currentCooldown = 0f;
-    private const float autoCloseTime = 3f;
-    private float currentAutoCloseTime = 0f;
     private bool isOpen = false;
     private MapPrefabs mapPrefabs;
 
-    public List<Vector2Int> linkedTiles = new List<Vector2Int>();
     public bool isFullyClosed = true;
 
     void Start()
@@ -21,15 +18,23 @@ public class DoorScript : MonoBehaviour
         mapPrefabs = GameObject.Find("GameManager").GetComponent<MapPrefabs>();
     }
 
-    private void EnableLinkedTiles(bool enable)
+    void OnEnable()
     {
-        foreach (Vector2Int tile in linkedTiles)
+        if (anim && mapPrefabs)
         {
-            if (tile != Globals.player.GetComponent<PlayerStats>().getPlayerTile())
-                if (enable)
-                    mapPrefabs.EnableTile(tile);
-                else
-                    mapPrefabs.DisableTile(tile);
+            anim.ResetTrigger("open");
+            anim.ResetTrigger("close");
+            if (mapPrefabs.doorPrefabsType[transform.parent.position].isOpenedDoor)
+            {
+                anim.SetTrigger("open");
+                isOpen = true;
+            }
+            else
+            {
+                anim.SetTrigger("close");
+                isOpen = false;
+            }
+            currentCooldown = cooldown;
         }
     }
 
@@ -37,21 +42,28 @@ public class DoorScript : MonoBehaviour
     {
         if (currentCooldown <= 0f)
         {
+            PrefabType door = mapPrefabs.doorPrefabsType[transform.parent.position];
             currentCooldown = cooldown;
             isFullyClosed = false;
-            EnableLinkedTiles(true);
             if (isOpen)
             {
                 anim.SetTrigger("close");
                 isOpen = false;
+                door.isOpenedDoor = false;
             }
             else if (!isOpen)
             {
                 anim.SetTrigger("open");
                 isOpen = true;
-                currentAutoCloseTime = 0f;
+                door.isOpenedDoor = true;
             }
+            mapPrefabs.doorPrefabsType[transform.parent.position] = door;
         }
+    }
+
+    public bool IsOpen()
+    {
+        return isOpen;
     }
 
     void Update()
@@ -61,13 +73,6 @@ public class DoorScript : MonoBehaviour
         else if (!isFullyClosed && !isOpen)
         {
             isFullyClosed = true;
-            EnableLinkedTiles(false);
-        }
-        if (isOpen)
-        {
-            currentAutoCloseTime += Time.deltaTime;
-            if (currentAutoCloseTime >= autoCloseTime)
-                OpenCloseDoor();
         }
     }
 }

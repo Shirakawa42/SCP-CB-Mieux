@@ -61,6 +61,7 @@ public class PlayerHandScript : MonoBehaviour
 
     void Update()
     {
+        targets.RemoveWhere(item => item == null);
         if (targets.Count > 0)
         {
             GetTarget();

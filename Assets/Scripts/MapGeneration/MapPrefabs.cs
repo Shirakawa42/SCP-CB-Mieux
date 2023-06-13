@@ -8,11 +8,13 @@ public struct PrefabType
 {
     public GameObject prefab;
     public Quaternion rotation;
+    public bool isOpenedDoor;
 
-    public PrefabType(GameObject prefab, Quaternion rotation)
+    public PrefabType(GameObject prefab, Quaternion rotation, bool isOpenedDoor = false)
     {
         this.prefab = prefab;
         this.rotation = rotation;
+        this.isOpenedDoor = isOpenedDoor;
     }
 }
 
@@ -20,7 +22,7 @@ public class MapPrefabs : MonoBehaviour
 {
     private Dictionary<Vector2Int, TileType> map;
     private Dictionary<Vector2Int, PrefabType> mapPrefabsType = new Dictionary<Vector2Int, PrefabType>();
-    private Dictionary<Vector3, PrefabType> doorPrefabsType = new Dictionary<Vector3, PrefabType>();
+    public Dictionary<Vector3, PrefabType> doorPrefabsType = new Dictionary<Vector3, PrefabType>();
     public List<GameObject> straightCorridors;
     public List<GameObject> angleCorridors;
     public List<GameObject> threeWayCorridors;
@@ -35,8 +37,10 @@ public class MapPrefabs : MonoBehaviour
     public List<GameObject> metroAngleCorridors;
     public List<GameObject> doors;
     public GameObject metro;
-    public PrefabsPool prefabsPool;
     public Generator generator;
+    public SmoothInstantiator smoothInstantiator;
+    public int doorLod = 2;
+    
 
     private void PlaceMetroRooms(Vector2Int pos)
     {
@@ -232,7 +236,7 @@ public class MapPrefabs : MonoBehaviour
         {
             mapPrefabsType[pos] = new PrefabType(fourWayRooms[Random.Range(0, fourWayRooms.Count)], Quaternion.Euler(0, 0, 0));
         }
-        
+
     }
 
     private bool CheckNeighbour(Vector2Int pos, Vector2Int dir)
@@ -390,42 +394,34 @@ public class MapPrefabs : MonoBehaviour
         }
     }
 
-    private (Vector3, Vector3)[] getDoorPositionsInTile(Vector2Int tile)
+    public void SetTile(Vector2Int pos, int lod)
     {
-        (Vector3, Vector3)[] doorPositions = {
-            (new Vector3(tile.x * Globals.TILE_SIZE + Globals.TILE_SIZE / 2, 0, tile.y * Globals.TILE_SIZE), new Vector3(Globals.TILE_SIZE / 2, 0, 0)),
-            (new Vector3(tile.x * Globals.TILE_SIZE - Globals.TILE_SIZE / 2, 0, tile.y * Globals.TILE_SIZE), new Vector3(-Globals.TILE_SIZE / 2, 0, 0)),
-            (new Vector3(tile.x * Globals.TILE_SIZE, 0, tile.y * Globals.TILE_SIZE + Globals.TILE_SIZE / 2), new Vector3(0, 0, Globals.TILE_SIZE / 2)),
-            (new Vector3(tile.x * Globals.TILE_SIZE, 0, tile.y * Globals.TILE_SIZE - Globals.TILE_SIZE / 2), new Vector3(0, 0, -Globals.TILE_SIZE / 2))
-        };
-        return doorPositions;
+        if (lod <= this.doorLod)
+        {
+            Vector3[] doorPositions = Utils.getDoorPositionsInTile(pos);
+            foreach (Vector3 doorPosition in doorPositions)
+            {
+                if (doorPrefabsType.ContainsKey(doorPosition))
+                    smoothInstantiator.AddDoor(doorPrefabsType[doorPosition], doorPosition);
+            }
+        }
+        else
+        {
+            Vector3[] doorPositions = Utils.getDoorPositionsInTile(pos);
+            foreach (Vector3 doorPosition in doorPositions)
+            {
+                if (doorPrefabsType.ContainsKey(doorPosition))
+                    smoothInstantiator.RemoveDoor(doorPosition, doorPrefabsType[doorPosition]);
+            }
+        }
+        if (mapPrefabsType.ContainsKey(pos))
+            smoothInstantiator.InstantiatePrefab(mapPrefabsType[pos], Utils.TileToWorldPosition(pos), lod);
     }
 
-    public GameObject EnableTile(Vector2Int pos)
+    public void SetTileInstant(Vector2Int pos, int lod)
     {
-        (Vector3, Vector3)[] doorPositions = getDoorPositionsInTile(pos);
-        foreach ((Vector3, Vector3) doorPos in doorPositions)
-            if (doorPrefabsType.ContainsKey(doorPos.Item1))
-                prefabsPool.Create(doorPrefabsType[doorPos.Item1], doorPos.Item1, true, doorPos.Item2);
-        return prefabsPool.Create(mapPrefabsType[pos], Utils.TileToWorldPosition(pos), false);
-    }
-
-    public void DisableTile(Vector2Int pos)
-    {
-        (Vector3, Vector3)[] doorPositions = getDoorPositionsInTile(pos);
-        foreach ((Vector3, Vector3) doorPos in doorPositions)
-            if (doorPrefabsType.ContainsKey(doorPos.Item1) && disableDoor(doorPos.Item1, pos))
-                prefabsPool.Destroy(doorPos.Item1, doorPrefabsType[doorPos.Item1]);
-        prefabsPool.Destroy(Utils.TileToWorldPosition(pos), mapPrefabsType[pos]);
-    }
-
-    private bool disableDoor(Vector3 doorPos, Vector2Int targetTile)
-    {
-        DoorScript door = prefabsPool.instantiatedPrefabs[doorPos].GetComponentInChildren<DoorScript>();
-        foreach (Vector2Int tile in door.linkedTiles)
-            if (tile != targetTile && prefabsPool.instantiatedPrefabs.ContainsKey(Utils.TileToWorldPosition(tile)))
-                return false;
-        return true;
+        if (mapPrefabsType.ContainsKey(pos))
+            smoothInstantiator.InstantiatePriorityPrefab(mapPrefabsType[pos], Utils.TileToWorldPosition(pos), lod);
     }
 
     public void GeneratePrefabs(Dictionary<Vector2Int, TileType> map)
@@ -445,5 +441,7 @@ public class MapPrefabs : MonoBehaviour
             if (map[pos] == TileType.Corridor)
                 PlaceCorridor(pos);
         PlaceDoors();
+        foreach (Vector2Int pos in mapPrefabsType.Keys)
+            mapPrefabsType[pos].prefab.SetActive(true);
     }
 }

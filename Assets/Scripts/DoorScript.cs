@@ -5,7 +5,7 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
     private Animator anim;
-    private const float cooldown = .6f;
+    private const float cooldown = .5f;
     private float currentCooldown = 0f;
     private bool isOpen = false;
     private MapPrefabs mapPrefabs;
@@ -74,5 +74,6 @@ public class DoorScript : MonoBehaviour
         {
             isFullyClosed = true;
         }
+        //anim.Update(0);
     }
 }

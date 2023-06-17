@@ -24,19 +24,19 @@ public class PlayerMapLoader : MonoBehaviour
 
         if (playerTile != previousPlayerTile)
         {
-            LoadTilesAroundPlayer(playerTile);
             previousPlayerTile = playerTile;
+            LoadTilesAroundPlayer(playerTile);
         }
     }
 
     private void LoadTilesAroundPlayer(Vector2Int playerTile)
     {
-        for (int x = playerTile.x - 4; x <= playerTile.x + 4; x++)
+        for (int x = playerTile.x - 3; x <= playerTile.x + 3; x++)
         {
-            for (int y = playerTile.y - 4; y <= playerTile.y + 4; y++)
+            for (int y = playerTile.y - 3; y <= playerTile.y + 3; y++)
             {
                 Vector2Int tilePosition = new Vector2Int(x, y);
-                int distanceToPlayer = Mathf.Abs(x - playerTile.x) + Mathf.Abs(y - playerTile.y);
+                int distanceToPlayer = AstarPathfinding.PathFinding(playerTile, tilePosition, mapPrefabs.mapPrefabsType);
 
                 switch (distanceToPlayer)
                 {
@@ -50,7 +50,7 @@ public class PlayerMapLoader : MonoBehaviour
                         mapPrefabs.SetTile(tilePosition, 2);
                         break;
                     case 3:
-                        mapPrefabs.SetTile(tilePosition, 3);
+                        mapPrefabs.SetTile(tilePosition, 4);
                         break;
                     default:
                         mapPrefabs.SetTile(tilePosition, 4);

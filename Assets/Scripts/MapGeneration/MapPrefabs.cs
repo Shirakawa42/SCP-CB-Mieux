@@ -21,7 +21,7 @@ public struct PrefabType
 public class MapPrefabs : MonoBehaviour
 {
     private Dictionary<Vector2Int, TileType> map;
-    private Dictionary<Vector2Int, PrefabType> mapPrefabsType = new Dictionary<Vector2Int, PrefabType>();
+    public Dictionary<Vector2Int, PrefabType> mapPrefabsType = new Dictionary<Vector2Int, PrefabType>();
     public Dictionary<Vector3, PrefabType> doorPrefabsType = new Dictionary<Vector3, PrefabType>();
     public List<GameObject> straightCorridors;
     public List<GameObject> angleCorridors;

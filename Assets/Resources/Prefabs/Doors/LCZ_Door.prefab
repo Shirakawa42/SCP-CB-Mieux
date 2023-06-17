@@ -8330,7 +8330,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: a1d55d4ba7f409743995687df7d14cbf, type: 2}
-  m_CullingMode: 2
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -8366,7 +8366,7 @@ GameObject:
   - component: {fileID: 6591371206432955858}
   - component: {fileID: 6591371206432955861}
   - component: {fileID: 6157051430757280562}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14705,7 +14705,7 @@ GameObject:
   - component: {fileID: 6591371206459529647}
   - component: {fileID: 6591371206459529646}
   - component: {fileID: 6591371206459529681}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SCP_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16954,7 +16954,7 @@ GameObject:
   - component: {fileID: 6591371206822850176}
   - component: {fileID: 6591371206822850179}
   - component: {fileID: 6628156002092965073}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23235,7 +23235,7 @@ GameObject:
   - component: {fileID: 6591371207295719781}
   - component: {fileID: 6591371207295719780}
   - component: {fileID: 6591371207295719783}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SCP_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

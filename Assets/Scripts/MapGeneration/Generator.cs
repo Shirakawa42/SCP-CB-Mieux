@@ -120,7 +120,7 @@ public class Generator : MonoBehaviour
         Vector2Int currentPos = new Vector2Int(0, 0);
         HashSet<Vector2Int> availablePos = new HashSet<Vector2Int>();
 
-        getInitialMetroRoomsPosition();
+        //getInitialMetroRoomsPosition();
 
         map.Add(currentPos, TileType.Room);
         AddAvailablePositions(new Vector2Int(0, 0), availablePos);
@@ -179,12 +179,12 @@ public class Generator : MonoBehaviour
                 }
             }
 
-            updateMetroRooms(currentPos);
+            //updateMetroRooms(currentPos);
             AddAvailablePositions(currentPos, availablePos);
             availablePos.Remove(currentPos);
         }
 
-        addMetroRoomsToMap();
+        //addMetroRoomsToMap();
 
         if (roomsToGenerate > 0)
             Debug.Log("Could not generate all rooms");
@@ -278,12 +278,10 @@ public class Generator : MonoBehaviour
         foreach (Vector2Int pos in map.Keys)
         {
             if (pos != new Vector2Int(0, 0))
+            {
                 mapPrefabs.SetTileInstant(pos, 1);
-        }
-        foreach (Vector2Int pos in map.Keys)
-        {
-            if (pos != new Vector2Int(0, 0))
                 mapPrefabs.SetTileInstant(pos, 4);
+            }
         }
         mapPrefabs.SetTileInstant(Globals.player.GetComponent<PlayerStats>().getPlayerTile(), 1);
     }

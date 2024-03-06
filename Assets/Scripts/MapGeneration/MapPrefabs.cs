@@ -429,11 +429,11 @@ public class MapPrefabs : MonoBehaviour
         this.map = map;
         mapPrefabsType.Clear();
         doorPrefabsType.Clear();
-        foreach (Vector2Int pos in map.Keys)
-            if (map[pos] == TileType.Metro)
-                PlaceMetroRooms(pos);
-        PlaceMetroCorridors();
-        PlaceMetro();
+        //foreach (Vector2Int pos in map.Keys)
+        //    if (map[pos] == TileType.Metro)
+        //        PlaceMetroRooms(pos);
+        //PlaceMetroCorridors();
+        //PlaceMetro();
         foreach (Vector2Int pos in map.Keys)
             if (map[pos] == TileType.Room)
                 PlaceRooms(pos);
